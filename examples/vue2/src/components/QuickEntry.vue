@@ -2,6 +2,7 @@
   <div class="quick-entry">
     <div class="quick-entry__title" v-if="title">
       <span class="title-text">{{ title }}</span>
+      <slot name="extra" />
     </div>
     <div class="quick-entry__grid" :style="gridStyle">
       <div
@@ -10,33 +11,56 @@
         class="entry-item"
         @click="handleClick(item)"
       >
-        <div class="entry-item__icon">
-          <img :src="item.iconUrl" :alt="item.name" loading="lazy" />
-          <span v-if="item.badge" class="entry-item__badge">{{ item.badge }}</span>
-        </div>
-        <span class="entry-item__name">{{ item.name }}</span>
+        <slot name="item" :item="item" :index="index">
+          <div class="entry-item__icon">
+            <img :src="item.iconUrl" :alt="item.name" loading="lazy" />
+            <span v-if="item.badge" class="entry-item__badge">{{ item.badge }}</span>
+          </div>
+          <span class="entry-item__name">{{ item.name }}</span>
+        </slot>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+/**
+ * 快捷入口组件
+ * @description 宫格导航入口，支持自定义列数和角标
+ * @example
+ * <QuickEntry
+ *   title="快捷入口"
+ *   :section-data="entryList"
+ *   :columns="5"
+ *   @action="handleEntryClick"
+ * />
+ */
 export default {
   name: 'QuickEntry',
+
   props: {
+    /** 区块标题 */
     title: {
       type: String,
       default: '',
     },
+    /** 入口数据列表 */
     sectionData: {
       type: Array,
       default: () => [],
     },
+    /** 每行显示数量 */
     columns: {
       type: Number,
       default: 5,
     },
+    /** 区块 ID */
+    sectionId: {
+      type: String,
+      default: '',
+    },
   },
+
   computed: {
     gridStyle() {
       return {
@@ -44,7 +68,12 @@ export default {
       }
     },
   },
+
   methods: {
+    /**
+     * 处理点击事件
+     * @param {Object} item 入口项数据
+     */
     handleClick(item) {
       this.$emit('action', item)
     },

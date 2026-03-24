@@ -1,4 +1,4 @@
-# Vue Dynamic Page Demo
+# Vue Dynamic Page Demo (Vue 2)
 
 基于 Vue 2 + Vite 的动态页面演示项目。
 
@@ -26,12 +26,77 @@ src/
     └── ProductList.vue        # 商品列表组件
 ```
 
-## 功能特性
+## 组件特性
 
-- **动态渲染**：根据接口配置动态渲染组件
-- **骨架屏**：加载时显示骨架屏占位
-- **手势滑动**：轮播图支持手势滑动
-- **响应式**：适配移动端显示
+### DynamicHomePage
+
+动态页面容器，根据配置渲染不同区块。
+
+| Props | 类型 | 默认值 | 说明 |
+|-------|------|--------|------|
+| autoLoad | Boolean | true | 是否自动加载数据 |
+
+| Events | 参数 | 说明 |
+|--------|------|------|
+| action | item | 区块项点击事件 |
+| loaded | data | 数据加载完成 |
+| error | error | 数据加载错误 |
+
+| Methods | 说明 |
+|---------|------|
+| refresh() | 刷新页面数据 |
+| getPageData() | 获取当前数据 |
+| isLoading() | 获取加载状态 |
+| getError() | 获取错误信息 |
+
+### QuickEntry
+
+快捷入口宫格导航组件。
+
+| Props | 类型 | 默认值 | 说明 |
+|-------|------|--------|------|
+| title | String | '' | 区块标题 |
+| sectionData | Array | [] | 入口数据 |
+| columns | Number | 5 | 每行数量 |
+
+| Slots | 说明 |
+|-------|------|
+| extra | 标题右侧扩展 |
+| item | 自定义入口项（作用域插槽） |
+
+### Banner
+
+轮播图组件，支持自动播放和手势滑动。
+
+| Props | 类型 | 默认值 | 说明 |
+|-------|------|--------|------|
+| sectionData | Array | [] | 轮播数据 |
+| autoplay | Number | 3000 | 自动播放间隔 |
+| showIndicators | Boolean | true | 显示指示器 |
+
+| Events | 参数 | 说明 |
+|--------|------|------|
+| action | item | 点击事件 |
+| change | index | 切换事件 |
+
+### ProductList
+
+商品列表组件。
+
+| Props | 类型 | 默认值 | 说明 |
+|-------|------|--------|------|
+| title | String | '' | 区块标题 |
+| sectionData | Array | [] | 商品数据 |
+| columns | Number | 2 | 每行数量 |
+| loading | Boolean | false | 加载状态 |
+| config | Object | {} | 扩展配置 |
+
+| Slots | 说明 |
+|-------|------|
+| header-extra | 标题右侧扩展 |
+| loading | 加载状态 |
+| empty | 空状态 |
+| item | 自定义商品卡片 |
 
 ## 扩展新组件
 

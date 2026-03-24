@@ -3,8 +3,10 @@
  * 模拟后端接口返回的页面配置
  */
 
-// Section 类型枚举
-const SectionType = {
+/**
+ * Section 类型枚举
+ */
+export const SectionType = {
   QUICK_ENTRY: 1,
   BANNER: 2,
   PRODUCT_LIST: 3,
@@ -12,6 +14,7 @@ const SectionType = {
 
 /**
  * 获取 Mock 首页数据
+ * @returns {Object} 页面配置数据
  */
 export const getMockPageData = () => {
   return {
@@ -191,6 +194,8 @@ export const getMockPageData = () => {
 
 /**
  * 获取 Mock 数据（带延迟）
+ * @param {number} delay 延迟时间（毫秒）
+ * @returns {Promise<Object>} 页面配置数据
  */
 export const getMockPageDataWithDelay = (delay = 500) => {
   return new Promise((resolve) => {
