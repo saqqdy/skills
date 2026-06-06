@@ -1,0 +1,1902 @@
+{
+	"version": "1.0.0",
+	"project": {
+		"name": "@saqqdy/skills",
+		"languages": [
+			"python",
+			"markdown",
+			"typescript",
+			"html",
+			"json",
+			"yaml"
+		],
+		"frameworks": [],
+		"description": "A collection of Claude Code skills for building AI-powered development tools",
+		"analyzedAt": "2026-06-06T13:13:18Z",
+		"gitCommitHash": "204af15804fff46f19c332e04e14439b3dd60884"
+	},
+	"nodes": [
+		{
+			"id": "file:scripts/utils.py",
+			"type": "file",
+			"name": "utils.py",
+			"filePath": "scripts/utils.py",
+			"summary": "Shared utility module for parsing SKILL.md files, extracting metadata, and discovering skill directories across the project.",
+			"tags": [
+				"utility",
+				"parsing",
+				"skill-management",
+				"shared-module"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "function:scripts/utils.py:parse_skill_md",
+			"type": "function",
+			"name": "parse_skill_md",
+			"filePath": "scripts/utils.py",
+			"lineRange": [
+				6,
+				46
+			],
+			"summary": "Parses a SKILL.md file to extract the skill name, description, and full content from YAML frontmatter.",
+			"tags": [
+				"parsing",
+				"yaml",
+				"frontmatter",
+				"skill-metadata"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "function:scripts/utils.py:get_skill_metadata",
+			"type": "function",
+			"name": "get_skill_metadata",
+			"filePath": "scripts/utils.py",
+			"lineRange": [
+				49,
+				64
+			],
+			"summary": "Loads and returns skill metadata as a dictionary from SKILL.md YAML frontmatter using yaml.safe_load.",
+			"tags": [
+				"parsing",
+				"yaml",
+				"metadata",
+				"skill-metadata"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "function:scripts/utils.py:find_skill_dirs",
+			"type": "function",
+			"name": "find_skill_dirs",
+			"filePath": "scripts/utils.py",
+			"lineRange": [
+				67,
+				69
+			],
+			"summary": "Discovers all skill directories under a base path by checking for SKILL.md presence.",
+			"tags": [
+				"discovery",
+				"filesystem",
+				"skill-management"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "file:scripts/improve_description.py",
+			"type": "file",
+			"name": "improve_description.py",
+			"filePath": "scripts/improve_description.py",
+			"summary": "CLI tool that improves skill descriptions by calling Claude with eval results and history, generating optimized descriptions under 1024 characters.",
+			"tags": [
+				"cli",
+				"llm-integration",
+				"optimization",
+				"skill-management"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "function:scripts/improve_description.py:_call_claude",
+			"type": "function",
+			"name": "_call_claude",
+			"filePath": "scripts/improve_description.py",
+			"lineRange": [
+				19,
+				37
+			],
+			"summary": "Invokes the Claude CLI as a subprocess with a prompt, handling timeout and error reporting.",
+			"tags": [
+				"llm-integration",
+				"subprocess",
+				"utility"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "function:scripts/improve_description.py:improve_description",
+			"type": "function",
+			"name": "improve_description",
+			"filePath": "scripts/improve_description.py",
+			"lineRange": [
+				40,
+				108
+			],
+			"summary": "Generates an improved skill description by prompting Claude with current description, eval results, failed triggers, false triggers, and optimization history.",
+			"tags": [
+				"llm-integration",
+				"optimization",
+				"prompt-engineering",
+				"skill-management"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "function:scripts/improve_description.py:main",
+			"type": "function",
+			"name": "main",
+			"filePath": "scripts/improve_description.py",
+			"lineRange": [
+				111,
+				156
+			],
+			"summary": "CLI entry point that loads eval results and history, calls improve_description, and outputs the new description with updated history as JSON.",
+			"tags": [
+				"cli",
+				"entry-point"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "file:scripts/run_eval.py",
+			"type": "file",
+			"name": "run_eval.py",
+			"filePath": "scripts/run_eval.py",
+			"summary": "Parallel evaluation harness that tests skill trigger rates by spawning Claude subprocesses, detecting triggers via stream events, and computing pass/fail statistics.",
+			"tags": [
+				"evaluation",
+				"testing",
+				"parallel-processing",
+				"skill-management"
+			],
+			"complexity": "complex",
+			"languageNotes": "Uses select/poll for non-blocking stream reads and ProcessPoolExecutor for parallel query execution."
+		},
+		{
+			"id": "function:scripts/run_eval.py:find_project_root",
+			"type": "function",
+			"name": "find_project_root",
+			"filePath": "scripts/run_eval.py",
+			"lineRange": [
+				22,
+				32
+			],
+			"summary": "Locates the project root by walking up from cwd looking for .claude/ directory.",
+			"tags": [
+				"discovery",
+				"filesystem",
+				"utility"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "function:scripts/run_eval.py:run_single_query",
+			"type": "function",
+			"name": "run_single_query",
+			"filePath": "scripts/run_eval.py",
+			"lineRange": [
+				35,
+				181
+			],
+			"summary": "Runs a single query against Claude CLI with a dynamically created command file, detecting skill triggers via stream events with early-exit optimization.",
+			"tags": [
+				"evaluation",
+				"subprocess",
+				"streaming",
+				"skill-triggering"
+			],
+			"complexity": "complex",
+			"languageNotes": "Uses stream-json output format with partial messages for early trigger detection via content_block_start/delta events."
+		},
+		{
+			"id": "function:scripts/run_eval.py:run_eval",
+			"type": "function",
+			"name": "run_eval",
+			"filePath": "scripts/run_eval.py",
+			"lineRange": [
+				184,
+				256
+			],
+			"summary": "Executes the full evaluation set in parallel, aggregating trigger rates per query and computing pass/fail against thresholds.",
+			"tags": [
+				"evaluation",
+				"parallel-processing",
+				"aggregation",
+				"testing"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "function:scripts/run_eval.py:main",
+			"type": "function",
+			"name": "main",
+			"filePath": "scripts/run_eval.py",
+			"lineRange": [
+				259,
+				306
+			],
+			"summary": "CLI entry point that parses arguments, loads the eval set, runs the evaluation, and outputs results as JSON.",
+			"tags": [
+				"cli",
+				"entry-point"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "file:scripts/run_loop.py",
+			"type": "file",
+			"name": "run_loop.py",
+			"filePath": "scripts/run_loop.py",
+			"summary": "Iterative optimization loop that combines evaluation and description improvement, with train/test splits and history tracking to find the best-performing skill description.",
+			"tags": [
+				"optimization",
+				"evaluation",
+				"loop",
+				"skill-management"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "function:scripts/run_loop.py:split_eval_set",
+			"type": "function",
+			"name": "split_eval_set",
+			"filePath": "scripts/run_loop.py",
+			"lineRange": [
+				22,
+				38
+			],
+			"summary": "Stratified split of eval set into train and test sets, preserving trigger/non-trigger ratios.",
+			"tags": [
+				"data-processing",
+				"split",
+				"testing"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "function:scripts/run_loop.py:run_loop",
+			"type": "function",
+			"name": "run_loop",
+			"filePath": "scripts/run_loop.py",
+			"lineRange": [
+				41,
+				161
+			],
+			"summary": "Main optimization loop that iteratively evaluates descriptions on train set, improves failures via LLM, tracks history, and selects the best description based on test set performance.",
+			"tags": [
+				"optimization",
+				"loop",
+				"evaluation",
+				"machine-learning"
+			],
+			"complexity": "complex"
+		},
+		{
+			"id": "function:scripts/run_loop.py:main",
+			"type": "function",
+			"name": "main",
+			"filePath": "scripts/run_loop.py",
+			"lineRange": [
+				164,
+				200
+			],
+			"summary": "CLI entry point that runs the optimization loop and outputs the best description with full history as JSON.",
+			"tags": [
+				"cli",
+				"entry-point"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "file:scripts/package_all.py",
+			"type": "file",
+			"name": "package_all.py",
+			"filePath": "scripts/package_all.py",
+			"summary": "Batch packaging script that iterates through all skill directories and creates distributable .skill files using the package_skill module.",
+			"tags": [
+				"entry-point",
+				"batch-processing",
+				"packaging",
+				"cli"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "function:scripts/package_all.py:main",
+			"type": "function",
+			"name": "main",
+			"filePath": "scripts/package_all.py",
+			"lineRange": [
+				19,
+				52
+			],
+			"summary": "CLI entry point that discovers all skill directories and invokes package_skill for each one, reporting success/failure statistics.",
+			"tags": [
+				"entry-point",
+				"cli",
+				"orchestration"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "file:scripts/package_skill.py",
+			"type": "file",
+			"name": "package_skill.py",
+			"filePath": "scripts/package_skill.py",
+			"summary": "Core skill packaging module that validates and zips skill directories into distributable .skill files, excluding build artifacts.",
+			"tags": [
+				"utility",
+				"packaging",
+				"validation",
+				"file-processing"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "function:scripts/package_skill.py:should_exclude",
+			"type": "function",
+			"name": "should_exclude",
+			"filePath": "scripts/package_skill.py",
+			"lineRange": [
+				30,
+				42
+			],
+			"summary": "Filter function that determines which files/directories to exclude from packaging (build artifacts, cache files, evals directory).",
+			"tags": [
+				"utility",
+				"filtering",
+				"file-processing"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "function:scripts/package_skill.py:package_skill",
+			"type": "function",
+			"name": "package_skill",
+			"filePath": "scripts/package_skill.py",
+			"lineRange": [
+				45,
+				111
+			],
+			"summary": "Main packaging function that validates a skill, creates a zip archive excluding unwanted files, and writes a .skill file.",
+			"tags": [
+				"packaging",
+				"validation",
+				"archive-creation"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "function:scripts/package_skill.py:main",
+			"type": "function",
+			"name": "main",
+			"filePath": "scripts/package_skill.py",
+			"lineRange": [
+				114,
+				135
+			],
+			"summary": "CLI entry point that parses command-line arguments and invokes package_skill with the specified paths.",
+			"tags": [
+				"entry-point",
+				"cli"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "file:scripts/quick_validate.py",
+			"type": "file",
+			"name": "quick_validate.py",
+			"filePath": "scripts/quick_validate.py",
+			"summary": "Skill validation module that checks SKILL.md frontmatter format, required fields, naming conventions, and field constraints.",
+			"tags": [
+				"validation",
+				"utility",
+				"schema-checking",
+				"parsing"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "function:scripts/quick_validate.py:validate_skill",
+			"type": "function",
+			"name": "validate_skill",
+			"filePath": "scripts/quick_validate.py",
+			"lineRange": [
+				21,
+				103
+			],
+			"summary": "Comprehensive validator that checks SKILL.md structure, YAML frontmatter parsing, required fields, naming conventions, and length limits.",
+			"tags": [
+				"validation",
+				"schema-checking",
+				"yaml-parsing"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "function:scripts/quick_validate.py:validate_all_skills",
+			"type": "function",
+			"name": "validate_all_skills",
+			"filePath": "scripts/quick_validate.py",
+			"lineRange": [
+				106,
+				127
+			],
+			"summary": "Batch validator that iterates through all skill directories and reports validation status for each.",
+			"tags": [
+				"validation",
+				"batch-processing",
+				"utility"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "document:CHANGELOG.md",
+			"type": "document",
+			"name": "CHANGELOG.md",
+			"filePath": "CHANGELOG.md",
+			"summary": "Project changelog documenting the initial 1.0.0 release with all features, project structure, and tooling commands for skill validation, packaging, evaluation, and optimization.",
+			"tags": [
+				"documentation",
+				"changelog",
+				"release-notes"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "document:DEVELOPMENT.md",
+			"type": "document",
+			"name": "DEVELOPMENT.md",
+			"filePath": "DEVELOPMENT.md",
+			"summary": "Comprehensive Chinese development guide covering project architecture, environment setup, code standards for TypeScript/Python/Markdown, development workflows for creating and modifying skills, testing guidelines, debugging tips, release process, and contribution guidelines.",
+			"tags": [
+				"documentation",
+				"development-guide",
+				"contribution"
+			],
+			"complexity": "complex"
+		},
+		{
+			"id": "document:README.md",
+			"type": "document",
+			"name": "README.md",
+			"filePath": "README.md",
+			"summary": "Main English documentation explaining the Skills system concept, project structure, quick start guide, SKILL.md format specification, Python tooling reference with usage examples, eval-viewer documentation, agents subagents overview, and JSON data format specifications.",
+			"tags": [
+				"documentation",
+				"entry-point",
+				"overview"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "document:README_CN.md",
+			"type": "document",
+			"name": "README_CN.md",
+			"filePath": "README_CN.md",
+			"summary": "Chinese documentation mirroring the English README, covering Skills concept, project structure, quick start, SKILL.md format, detailed Python tooling reference, eval-viewer, agents subagents, JSON formats, development standards, and publishing instructions.",
+			"tags": [
+				"documentation",
+				"overview",
+				"chinese"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "config:package.json",
+			"type": "config",
+			"name": "package.json",
+			"filePath": "package.json",
+			"summary": "npm package configuration for @saqqdy/skills monorepo with scripts for linting, testing, validation, and packaging, plus devDependencies including ESLint, TypeScript, Vitest, and git hooks setup.",
+			"tags": [
+				"configuration",
+				"npm",
+				"build-system"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "config:pnpm-workspace.yaml",
+			"type": "config",
+			"name": "pnpm-workspace.yaml",
+			"filePath": "pnpm-workspace.yaml",
+			"summary": "pnpm workspace configuration defining the skills/* package glob and a dev catalog with shared dependency versions for ESLint, TypeScript, Vitest, and git tooling.",
+			"tags": [
+				"configuration",
+				"monorepo",
+				"pnpm"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "config:tsconfig.json",
+			"type": "config",
+			"name": "tsconfig.json",
+			"filePath": "tsconfig.json",
+			"summary": "TypeScript compiler configuration targeting ESNext with bundler module resolution, strict mode enabled, noUnused checks, and scope limited to scripts/**/*.ts files.",
+			"tags": [
+				"configuration",
+				"typescript",
+				"build-system"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "document:agents/analyzer.md",
+			"type": "document",
+			"name": "analyzer.md",
+			"filePath": "agents/analyzer.md",
+			"summary": "Post-hoc analysis agent that examines comparison results to understand why the winner won and generates actionable improvement suggestions for the losing skill.",
+			"tags": [
+				"documentation",
+				"agent",
+				"analysis",
+				"evaluation",
+				"improvement"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "document:agents/comparator.md",
+			"type": "document",
+			"name": "comparator.md",
+			"filePath": "agents/comparator.md",
+			"summary": "Blind comparison agent that evaluates two outputs without knowing which skill produced them, scoring based on content and structure rubrics to determine a winner.",
+			"tags": [
+				"documentation",
+				"agent",
+				"comparison",
+				"evaluation",
+				"blind-testing"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "document:agents/grader.md",
+			"type": "document",
+			"name": "grader.md",
+			"filePath": "agents/grader.md",
+			"summary": "Grading agent that evaluates execution transcripts and outputs against expectations, providing pass/fail verdicts with specific evidence citations.",
+			"tags": [
+				"documentation",
+				"agent",
+				"grading",
+				"evaluation",
+				"assertions"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "file:assets/eval_review.html",
+			"type": "file",
+			"name": "eval_review.html",
+			"filePath": "assets/eval_review.html",
+			"summary": "Static HTML template for displaying evaluation review results with embedded CSS and JavaScript for interactive viewing of skill evaluation data.",
+			"tags": [
+				"markup",
+				"evaluation",
+				"template",
+				"ui"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "config:eslint.config.mjs",
+			"type": "config",
+			"name": "eslint.config.mjs",
+			"filePath": "eslint.config.mjs",
+			"summary": "ESLint configuration file using flat config format for JavaScript and TypeScript linting rules across the project.",
+			"tags": [
+				"configuration",
+				"linting",
+				"javascript",
+				"typescript"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "file:eval-viewer/generate_review.py",
+			"type": "file",
+			"name": "generate_review.py",
+			"filePath": "eval-viewer/generate_review.py",
+			"summary": "Python script that generates interactive HTML review pages for skill evaluation runs, serving as a local HTTP server with feedback collection capabilities.",
+			"tags": [
+				"entry-point",
+				"evaluation",
+				"visualization",
+				"server"
+			],
+			"complexity": "complex"
+		},
+		{
+			"id": "function:eval-viewer/generate_review.py:main",
+			"type": "function",
+			"name": "main",
+			"filePath": "eval-viewer/generate_review.py",
+			"lineRange": [
+				387,
+				467
+			],
+			"summary": "Entry point that parses CLI arguments, finds evaluation runs, and starts a local HTTP server to serve the review interface.",
+			"tags": [
+				"entry-point",
+				"cli",
+				"server"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "function:eval-viewer/generate_review.py:find_runs",
+			"type": "function",
+			"name": "find_runs",
+			"filePath": "eval-viewer/generate_review.py",
+			"lineRange": [
+				60,
+				65
+			],
+			"summary": "Discovers and returns sorted evaluation run directories from a workspace, ordered by timestamp.",
+			"tags": [
+				"utility",
+				"discovery",
+				"filesystem"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "function:eval-viewer/generate_review.py:build_run",
+			"type": "function",
+			"name": "build_run",
+			"filePath": "eval-viewer/generate_review.py",
+			"lineRange": [
+				85,
+				146
+			],
+			"summary": "Constructs a run data object by loading metadata, prompt, output files, and grading results from a run directory.",
+			"tags": [
+				"data-model",
+				"serialization",
+				"parsing"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "function:eval-viewer/generate_review.py:embed_file",
+			"type": "function",
+			"name": "embed_file",
+			"filePath": "eval-viewer/generate_review.py",
+			"lineRange": [
+				149,
+				210
+			],
+			"summary": "Converts files to base64-encoded data URLs for embedding directly in HTML output, handling various MIME types.",
+			"tags": [
+				"utility",
+				"encoding",
+				"serialization"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "function:eval-viewer/generate_review.py:load_previous_iteration",
+			"type": "function",
+			"name": "load_previous_iteration",
+			"filePath": "eval-viewer/generate_review.py",
+			"lineRange": [
+				213,
+				247
+			],
+			"summary": "Loads feedback from a previous review iteration to enable comparison and iteration tracking.",
+			"tags": [
+				"utility",
+				"persistence",
+				"feedback"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "function:eval-viewer/generate_review.py:generate_html",
+			"type": "function",
+			"name": "generate_html",
+			"filePath": "eval-viewer/generate_review.py",
+			"lineRange": [
+				250,
+				281
+			],
+			"summary": "Generates the final HTML page by injecting run data and previous feedback into a template file.",
+			"tags": [
+				"templating",
+				"visualization",
+				"html-generation"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "class:eval-viewer/generate_review.py:ReviewHandler",
+			"type": "class",
+			"name": "ReviewHandler",
+			"filePath": "eval-viewer/generate_review.py",
+			"lineRange": [
+				308,
+				384
+			],
+			"summary": "HTTP request handler that serves the review page and collects feedback via GET and POST endpoints.",
+			"tags": [
+				"server",
+				"http-handler",
+				"api"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "file:eval-viewer/viewer.html",
+			"type": "file",
+			"name": "viewer.html",
+			"filePath": "eval-viewer/viewer.html",
+			"summary": "Comprehensive interactive HTML viewer for evaluation results with embedded JavaScript for filtering, sorting, and displaying skill evaluation data.",
+			"tags": [
+				"markup",
+				"visualization",
+				"evaluation",
+				"ui"
+			],
+			"complexity": "complex"
+		},
+		{
+			"id": "document:references/schemas.md",
+			"type": "document",
+			"name": "schemas.md",
+			"filePath": "references/schemas.md",
+			"summary": "Documentation file describing JSON schemas for evaluation data formats including evals.json, grading.json, timing.json, benchmark.json, and comparison.json.",
+			"tags": [
+				"documentation",
+				"schema",
+				"data-format",
+				"reference"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "file:scripts/__init__.py",
+			"type": "file",
+			"name": "__init__.py",
+			"filePath": "scripts/__init__.py",
+			"summary": "Empty Python package initializer for the scripts module, marking the directory as a Python package.",
+			"tags": [
+				"barrel",
+				"package"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "file:scripts/aggregate_benchmark.py",
+			"type": "file",
+			"name": "aggregate_benchmark.py",
+			"filePath": "scripts/aggregate_benchmark.py",
+			"summary": "Script that aggregates benchmark evaluation results from multiple runs, calculating statistics and generating markdown reports.",
+			"tags": [
+				"utility",
+				"benchmark",
+				"reporting",
+				"data-aggregation"
+			],
+			"complexity": "complex"
+		},
+		{
+			"id": "function:scripts/aggregate_benchmark.py:main",
+			"type": "function",
+			"name": "main",
+			"filePath": "scripts/aggregate_benchmark.py",
+			"lineRange": [
+				252,
+				276
+			],
+			"summary": "Entry point that parses CLI arguments, generates benchmark JSON and markdown reports.",
+			"tags": [
+				"entry-point",
+				"cli",
+				"reporting"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "function:scripts/aggregate_benchmark.py:load_run_results",
+			"type": "function",
+			"name": "load_run_results",
+			"filePath": "scripts/aggregate_benchmark.py",
+			"lineRange": [
+				46,
+				130
+			],
+			"summary": "Loads and parses evaluation results from all benchmark run directories, extracting grading and timing data.",
+			"tags": [
+				"data-loader",
+				"parsing",
+				"filesystem"
+			],
+			"complexity": "complex"
+		},
+		{
+			"id": "function:scripts/aggregate_benchmark.py:aggregate_results",
+			"type": "function",
+			"name": "aggregate_results",
+			"filePath": "scripts/aggregate_benchmark.py",
+			"lineRange": [
+				133,
+				181
+			],
+			"summary": "Aggregates individual run results into summary statistics including mean, std dev, and comparison metrics.",
+			"tags": [
+				"data-aggregation",
+				"statistics",
+				"analytics"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "function:scripts/aggregate_benchmark.py:generate_benchmark",
+			"type": "function",
+			"name": "generate_benchmark",
+			"filePath": "scripts/aggregate_benchmark.py",
+			"lineRange": [
+				184,
+				223
+			],
+			"summary": "Orchestrates the full benchmark generation pipeline, collecting runs and building the benchmark data structure.",
+			"tags": [
+				"orchestrator",
+				"pipeline",
+				"benchmark"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "function:scripts/aggregate_benchmark.py:generate_markdown",
+			"type": "function",
+			"name": "generate_markdown",
+			"filePath": "scripts/aggregate_benchmark.py",
+			"lineRange": [
+				226,
+				249
+			],
+			"summary": "Generates a human-readable markdown summary of benchmark results for documentation.",
+			"tags": [
+				"reporting",
+				"templating",
+				"documentation"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "function:scripts/aggregate_benchmark.py:calculate_stats",
+			"type": "function",
+			"name": "calculate_stats",
+			"filePath": "scripts/aggregate_benchmark.py",
+			"lineRange": [
+				24,
+				43
+			],
+			"summary": "Calculates statistical measures including mean, standard deviation, min, and max for a set of values.",
+			"tags": [
+				"utility",
+				"statistics",
+				"math"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "file:scripts/generate_report.py",
+			"type": "file",
+			"name": "generate_report.py",
+			"filePath": "scripts/generate_report.py",
+			"summary": "Script that generates an HTML report from evaluation output data with optional auto-refresh for live monitoring.",
+			"tags": [
+				"utility",
+				"reporting",
+				"html-generation"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "function:scripts/generate_report.py:generate_html",
+			"type": "function",
+			"name": "generate_html",
+			"filePath": "scripts/generate_report.py",
+			"lineRange": [
+				5,
+				66
+			],
+			"summary": "Generates a complete HTML report page from evaluation output data with embedded styles and optional auto-refresh.",
+			"tags": [
+				"templating",
+				"reporting",
+				"html-generation"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "document:skills/frontend-design/LICENSE.txt",
+			"type": "document",
+			"name": "LICENSE.txt",
+			"filePath": "skills/frontend-design/LICENSE.txt",
+			"summary": "License file for the frontend-design skill, containing standard open-source license terms.",
+			"tags": [
+				"documentation",
+				"legal",
+				"license"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "document:skills/frontend-design/SKILL.md",
+			"type": "document",
+			"name": "SKILL.md",
+			"filePath": "skills/frontend-design/SKILL.md",
+			"summary": "Skill definition for frontend design thinking and aesthetics guidelines, providing best practices for UI/UX design decisions.",
+			"tags": [
+				"documentation",
+				"skill",
+				"design",
+				"guidelines"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "document:skills/template/references/example.md",
+			"type": "document",
+			"name": "example.md",
+			"filePath": "skills/template/references/example.md",
+			"summary": "Comprehensive template guide explaining skill structure, SKILL.md format, progressive disclosure, and best practices for creating new skills.",
+			"tags": [
+				"documentation",
+				"template",
+				"guide",
+				"reference"
+			],
+			"complexity": "moderate"
+		},
+		{
+			"id": "document:skills/template/SKILL.md",
+			"type": "document",
+			"name": "SKILL.md",
+			"filePath": "skills/template/SKILL.md",
+			"summary": "Template skill definition demonstrating the standard structure and format for skill definitions, serving as a blueprint for new skill creation.",
+			"tags": [
+				"documentation",
+				"template",
+				"skill",
+				"reference"
+			],
+			"complexity": "simple"
+		},
+		{
+			"id": "config:vitest.config.ts",
+			"type": "config",
+			"name": "vitest.config.ts",
+			"filePath": "vitest.config.ts",
+			"summary": "Vitest configuration file for TypeScript unit testing setup with coverage reporting enabled.",
+			"tags": [
+				"configuration",
+				"testing",
+				"typescript",
+				"vitest"
+			],
+			"complexity": "simple"
+		}
+	],
+	"edges": [
+		{
+			"source": "file:scripts/improve_description.py",
+			"target": "file:scripts/utils.py",
+			"type": "imports",
+			"direction": "forward",
+			"weight": 0.7
+		},
+		{
+			"source": "file:scripts/run_eval.py",
+			"target": "file:scripts/utils.py",
+			"type": "imports",
+			"direction": "forward",
+			"weight": 0.7
+		},
+		{
+			"source": "file:scripts/run_loop.py",
+			"target": "file:scripts/improve_description.py",
+			"type": "imports",
+			"direction": "forward",
+			"weight": 0.7
+		},
+		{
+			"source": "file:scripts/run_loop.py",
+			"target": "file:scripts/run_eval.py",
+			"type": "imports",
+			"direction": "forward",
+			"weight": 0.7
+		},
+		{
+			"source": "file:scripts/run_loop.py",
+			"target": "file:scripts/utils.py",
+			"type": "imports",
+			"direction": "forward",
+			"weight": 0.7
+		},
+		{
+			"source": "file:scripts/utils.py",
+			"target": "function:scripts/utils.py:parse_skill_md",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/utils.py",
+			"target": "function:scripts/utils.py:get_skill_metadata",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/utils.py",
+			"target": "function:scripts/utils.py:find_skill_dirs",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/utils.py",
+			"target": "function:scripts/utils.py:parse_skill_md",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:scripts/utils.py",
+			"target": "function:scripts/utils.py:get_skill_metadata",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:scripts/utils.py",
+			"target": "function:scripts/utils.py:find_skill_dirs",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:scripts/improve_description.py",
+			"target": "function:scripts/improve_description.py:_call_claude",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/improve_description.py",
+			"target": "function:scripts/improve_description.py:improve_description",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/improve_description.py",
+			"target": "function:scripts/improve_description.py:main",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/improve_description.py",
+			"target": "function:scripts/improve_description.py:_call_claude",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:scripts/improve_description.py",
+			"target": "function:scripts/improve_description.py:improve_description",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "function:scripts/improve_description.py:improve_description",
+			"target": "function:scripts/improve_description.py:_call_claude",
+			"type": "calls",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "function:scripts/improve_description.py:main",
+			"target": "function:scripts/utils.py:parse_skill_md",
+			"type": "calls",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "function:scripts/improve_description.py:main",
+			"target": "function:scripts/improve_description.py:improve_description",
+			"type": "calls",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:scripts/run_eval.py",
+			"target": "function:scripts/run_eval.py:find_project_root",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/run_eval.py",
+			"target": "function:scripts/run_eval.py:run_single_query",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/run_eval.py",
+			"target": "function:scripts/run_eval.py:run_eval",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/run_eval.py",
+			"target": "function:scripts/run_eval.py:main",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/run_eval.py",
+			"target": "function:scripts/run_eval.py:find_project_root",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:scripts/run_eval.py",
+			"target": "function:scripts/run_eval.py:run_single_query",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:scripts/run_eval.py",
+			"target": "function:scripts/run_eval.py:run_eval",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "function:scripts/run_eval.py:run_eval",
+			"target": "function:scripts/run_eval.py:run_single_query",
+			"type": "calls",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "function:scripts/run_eval.py:main",
+			"target": "function:scripts/utils.py:parse_skill_md",
+			"type": "calls",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "function:scripts/run_eval.py:main",
+			"target": "function:scripts/run_eval.py:find_project_root",
+			"type": "calls",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "function:scripts/run_eval.py:main",
+			"target": "function:scripts/run_eval.py:run_eval",
+			"type": "calls",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:scripts/run_loop.py",
+			"target": "function:scripts/run_loop.py:split_eval_set",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/run_loop.py",
+			"target": "function:scripts/run_loop.py:run_loop",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/run_loop.py",
+			"target": "function:scripts/run_loop.py:main",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/run_loop.py",
+			"target": "function:scripts/run_loop.py:split_eval_set",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:scripts/run_loop.py",
+			"target": "function:scripts/run_loop.py:run_loop",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "function:scripts/run_loop.py:run_loop",
+			"target": "function:scripts/run_eval.py:find_project_root",
+			"type": "calls",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "function:scripts/run_loop.py:run_loop",
+			"target": "function:scripts/utils.py:parse_skill_md",
+			"type": "calls",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "function:scripts/run_loop.py:run_loop",
+			"target": "function:scripts/run_loop.py:split_eval_set",
+			"type": "calls",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "function:scripts/run_loop.py:run_loop",
+			"target": "function:scripts/run_eval.py:run_eval",
+			"type": "calls",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "function:scripts/run_loop.py:run_loop",
+			"target": "function:scripts/improve_description.py:improve_description",
+			"type": "calls",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "function:scripts/run_loop.py:main",
+			"target": "function:scripts/run_loop.py:run_loop",
+			"type": "calls",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:scripts/package_all.py",
+			"target": "file:scripts/package_skill.py",
+			"type": "imports",
+			"direction": "forward",
+			"weight": 0.7
+		},
+		{
+			"source": "file:scripts/package_all.py",
+			"target": "function:scripts/package_all.py:main",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/package_all.py",
+			"target": "function:scripts/package_all.py:main",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "function:scripts/package_all.py:main",
+			"target": "function:scripts/package_skill.py:package_skill",
+			"type": "calls",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:scripts/package_skill.py",
+			"target": "file:scripts/quick_validate.py",
+			"type": "imports",
+			"direction": "forward",
+			"weight": 0.7
+		},
+		{
+			"source": "file:scripts/package_skill.py",
+			"target": "function:scripts/package_skill.py:should_exclude",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/package_skill.py",
+			"target": "function:scripts/package_skill.py:package_skill",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/package_skill.py",
+			"target": "function:scripts/package_skill.py:main",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/package_skill.py",
+			"target": "function:scripts/package_skill.py:should_exclude",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:scripts/package_skill.py",
+			"target": "function:scripts/package_skill.py:package_skill",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:scripts/package_skill.py",
+			"target": "function:scripts/package_skill.py:main",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "function:scripts/package_skill.py:package_skill",
+			"target": "function:scripts/package_skill.py:should_exclude",
+			"type": "calls",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "function:scripts/package_skill.py:package_skill",
+			"target": "function:scripts/quick_validate.py:validate_skill",
+			"type": "calls",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "function:scripts/package_skill.py:main",
+			"target": "function:scripts/package_skill.py:package_skill",
+			"type": "calls",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:scripts/quick_validate.py",
+			"target": "function:scripts/quick_validate.py:validate_skill",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/quick_validate.py",
+			"target": "function:scripts/quick_validate.py:validate_all_skills",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/quick_validate.py",
+			"target": "function:scripts/quick_validate.py:validate_skill",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:scripts/quick_validate.py",
+			"target": "function:scripts/quick_validate.py:validate_all_skills",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "function:scripts/quick_validate.py:validate_all_skills",
+			"target": "function:scripts/quick_validate.py:validate_skill",
+			"type": "calls",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "config:package.json",
+			"target": "config:pnpm-workspace.yaml",
+			"type": "depends_on",
+			"direction": "forward",
+			"weight": 0.6
+		},
+		{
+			"source": "config:tsconfig.json",
+			"target": "config:package.json",
+			"type": "configures",
+			"direction": "forward",
+			"weight": 0.6
+		},
+		{
+			"source": "document:agents/analyzer.md",
+			"target": "document:agents/comparator.md",
+			"type": "related",
+			"direction": "forward",
+			"weight": 0.5
+		},
+		{
+			"source": "document:agents/comparator.md",
+			"target": "document:agents/grader.md",
+			"type": "related",
+			"direction": "forward",
+			"weight": 0.5
+		},
+		{
+			"source": "file:eval-viewer/generate_review.py",
+			"target": "function:eval-viewer/generate_review.py:main",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:eval-viewer/generate_review.py",
+			"target": "function:eval-viewer/generate_review.py:find_runs",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:eval-viewer/generate_review.py",
+			"target": "function:eval-viewer/generate_review.py:build_run",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:eval-viewer/generate_review.py",
+			"target": "function:eval-viewer/generate_review.py:embed_file",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:eval-viewer/generate_review.py",
+			"target": "function:eval-viewer/generate_review.py:load_previous_iteration",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:eval-viewer/generate_review.py",
+			"target": "function:eval-viewer/generate_review.py:generate_html",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:eval-viewer/generate_review.py",
+			"target": "class:eval-viewer/generate_review.py:ReviewHandler",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:eval-viewer/generate_review.py",
+			"target": "function:eval-viewer/generate_review.py:main",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:eval-viewer/generate_review.py",
+			"target": "function:eval-viewer/generate_review.py:find_runs",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:eval-viewer/generate_review.py",
+			"target": "function:eval-viewer/generate_review.py:build_run",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:eval-viewer/generate_review.py",
+			"target": "function:eval-viewer/generate_review.py:embed_file",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:eval-viewer/generate_review.py",
+			"target": "function:eval-viewer/generate_review.py:load_previous_iteration",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:eval-viewer/generate_review.py",
+			"target": "function:eval-viewer/generate_review.py:generate_html",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:eval-viewer/generate_review.py",
+			"target": "class:eval-viewer/generate_review.py:ReviewHandler",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:scripts/aggregate_benchmark.py",
+			"target": "function:scripts/aggregate_benchmark.py:main",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/aggregate_benchmark.py",
+			"target": "function:scripts/aggregate_benchmark.py:load_run_results",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/aggregate_benchmark.py",
+			"target": "function:scripts/aggregate_benchmark.py:aggregate_results",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/aggregate_benchmark.py",
+			"target": "function:scripts/aggregate_benchmark.py:generate_benchmark",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/aggregate_benchmark.py",
+			"target": "function:scripts/aggregate_benchmark.py:generate_markdown",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/aggregate_benchmark.py",
+			"target": "function:scripts/aggregate_benchmark.py:calculate_stats",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/aggregate_benchmark.py",
+			"target": "function:scripts/aggregate_benchmark.py:main",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:scripts/aggregate_benchmark.py",
+			"target": "function:scripts/aggregate_benchmark.py:load_run_results",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:scripts/aggregate_benchmark.py",
+			"target": "function:scripts/aggregate_benchmark.py:aggregate_results",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:scripts/aggregate_benchmark.py",
+			"target": "function:scripts/aggregate_benchmark.py:generate_benchmark",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:scripts/aggregate_benchmark.py",
+			"target": "function:scripts/aggregate_benchmark.py:generate_markdown",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:scripts/aggregate_benchmark.py",
+			"target": "function:scripts/aggregate_benchmark.py:calculate_stats",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "file:scripts/generate_report.py",
+			"target": "function:scripts/generate_report.py:generate_html",
+			"type": "contains",
+			"direction": "forward",
+			"weight": 1.0
+		},
+		{
+			"source": "file:scripts/generate_report.py",
+			"target": "function:scripts/generate_report.py:generate_html",
+			"type": "exports",
+			"direction": "forward",
+			"weight": 0.8
+		},
+		{
+			"source": "config:eslint.config.mjs",
+			"target": "file:eval-viewer/generate_review.py",
+			"type": "configures",
+			"direction": "forward",
+			"weight": 0.6
+		},
+		{
+			"source": "config:eslint.config.mjs",
+			"target": "file:scripts/aggregate_benchmark.py",
+			"type": "configures",
+			"direction": "forward",
+			"weight": 0.6
+		},
+		{
+			"source": "config:vitest.config.ts",
+			"target": "file:scripts/aggregate_benchmark.py",
+			"type": "configures",
+			"direction": "forward",
+			"weight": 0.6
+		},
+		{
+			"source": "document:references/schemas.md",
+			"target": "file:eval-viewer/generate_review.py",
+			"type": "documents",
+			"direction": "forward",
+			"weight": 0.5
+		},
+		{
+			"source": "document:references/schemas.md",
+			"target": "file:scripts/aggregate_benchmark.py",
+			"type": "documents",
+			"direction": "forward",
+			"weight": 0.5
+		},
+		{
+			"source": "document:skills/template/SKILL.md",
+			"target": "document:skills/template/references/example.md",
+			"type": "documents",
+			"direction": "forward",
+			"weight": 0.5
+		},
+		{
+			"source": "file:eval-viewer/generate_review.py",
+			"target": "file:assets/eval_review.html",
+			"type": "depends_on",
+			"direction": "forward",
+			"weight": 0.6
+		},
+		{
+			"source": "file:eval-viewer/generate_review.py",
+			"target": "file:eval-viewer/viewer.html",
+			"type": "depends_on",
+			"direction": "forward",
+			"weight": 0.6
+		}
+	],
+	"layers": [
+		{
+			"id": "layer:tooling",
+			"name": "Tooling Scripts",
+			"description": "Python scripts for skill validation, packaging, evaluation, benchmarking, and optimization workflows including LLM-based description improvement loops",
+			"nodeIds": [
+				"file:scripts/utils.py",
+				"file:scripts/improve_description.py",
+				"file:scripts/run_eval.py",
+				"file:scripts/run_loop.py",
+				"file:scripts/package_all.py",
+				"file:scripts/package_skill.py",
+				"file:scripts/quick_validate.py",
+				"file:scripts/__init__.py",
+				"file:scripts/aggregate_benchmark.py",
+				"file:scripts/generate_report.py"
+			]
+		},
+		{
+			"id": "layer:visualization",
+			"name": "Evaluation Viewer",
+			"description": "Web-based evaluation results viewer with HTTP server for interactive review and feedback collection on skill performance",
+			"nodeIds": [
+				"file:eval-viewer/generate_review.py",
+				"file:eval-viewer/viewer.html",
+				"file:assets/eval_review.html"
+			]
+		},
+		{
+			"id": "layer:skill-content",
+			"name": "Skill Definitions",
+			"description": "Claude Code skill packages including frontend-design guidelines and template skill with SKILL.md definitions and reference documentation",
+			"nodeIds": [
+				"document:skills/frontend-design/LICENSE.txt",
+				"document:skills/frontend-design/SKILL.md",
+				"document:skills/template/SKILL.md",
+				"document:skills/template/references/example.md"
+			]
+		},
+		{
+			"id": "layer:agent-definitions",
+			"name": "Agent Definitions",
+			"description": "Markdown definitions for subagents that handle grading, blind comparison, and post-hoc analysis of skill evaluation results",
+			"nodeIds": [
+				"document:agents/analyzer.md",
+				"document:agents/comparator.md",
+				"document:agents/grader.md"
+			]
+		},
+		{
+			"id": "layer:documentation",
+			"name": "Documentation",
+			"description": "Project documentation including English and Chinese README, development guide, changelog, and contribution guidelines",
+			"nodeIds": [
+				"document:README.md",
+				"document:README_CN.md",
+				"document:CHANGELOG.md",
+				"document:DEVELOPMENT.md"
+			]
+		},
+		{
+			"id": "layer:configuration",
+			"name": "Configuration",
+			"description": "Build system and tooling configuration files for npm/pnpm workspace, TypeScript, ESLint, and Vitest testing",
+			"nodeIds": [
+				"config:package.json",
+				"config:pnpm-workspace.yaml",
+				"config:tsconfig.json",
+				"config:eslint.config.mjs",
+				"config:vitest.config.ts"
+			]
+		},
+		{
+			"id": "layer:reference",
+			"name": "Reference Documentation",
+			"description": "JSON schema specifications and data format references for evaluation outputs and benchmark data",
+			"nodeIds": [
+				"document:references/schemas.md"
+			]
+		}
+	],
+	"tour": [
+		{
+			"order": 1,
+			"title": "Project Overview",
+			"description": "Start with the README to understand what this project is about. This is a Claude Code skills project - a collection of specialized instruction sets that enhance Claude's capabilities. The README explains the skill concept, project structure, and provides a quick start guide for creating and validating new skills.",
+			"nodeIds": [
+				"document:README.md"
+			]
+		},
+		{
+			"order": 2,
+			"title": "Shared Utilities Foundation",
+			"description": "The utils.py module is the most widely depended-upon file in the project (highest fan-in). It provides core parsing functions for SKILL.md files, including frontmatter extraction and metadata handling. Understanding this module first makes the rest of the tooling scripts easier to follow.",
+			"nodeIds": [
+				"file:scripts/utils.py"
+			],
+			"languageLesson": "Python modules with shared utilities should expose a clean public API through explicit exports. The parse_skill_md function uses yaml.safe_load to prevent arbitrary code execution from untrusted YAML input."
+		},
+		{
+			"order": 3,
+			"title": "Skill Validation Workflow",
+			"description": "The quick_validate.py script checks SKILL.md files for proper format - validating YAML frontmatter, required fields, naming conventions, and character limits. Package_skill.py then uses this validation before zipping skills into distributable .skill files, excluding build artifacts and cache files.",
+			"nodeIds": [
+				"file:scripts/quick_validate.py",
+				"file:scripts/package_skill.py"
+			]
+		},
+		{
+			"order": 4,
+			"title": "Batch Packaging",
+			"description": "Building on the package_skill.py module from Step 3, package_all.py iterates through all skill directories and creates distributable .skill files in a single batch operation. This is the primary workflow for preparing skills for distribution.",
+			"nodeIds": [
+				"file:scripts/package_all.py"
+			]
+		},
+		{
+			"order": 5,
+			"title": "Evaluation Harness",
+			"description": "The run_eval.py script is the core evaluation engine - it tests whether skill descriptions trigger correctly for given queries by spawning Claude subprocesses in parallel. It uses stream-json output format to detect triggers early without waiting for full responses, and computes pass/fail statistics.",
+			"nodeIds": [
+				"file:scripts/run_eval.py"
+			],
+			"languageLesson": "Python's ProcessPoolExecutor enables parallel subprocess execution. The script uses select/poll for non-blocking stream reads and content_block_start/delta events for early trigger detection, reducing evaluation time significantly."
+		},
+		{
+			"order": 6,
+			"title": "LLM-Powered Description Optimization",
+			"description": "The improve_description.py script calls Claude to generate optimized skill descriptions based on evaluation results. It analyzes failed triggers and false positives, then produces improved descriptions under 1024 characters. The run_loop.py orchestrates this in an iterative optimization cycle with train/test splits.",
+			"nodeIds": [
+				"file:scripts/improve_description.py",
+				"file:scripts/run_loop.py"
+			],
+			"languageLesson": "LLM-based optimization loops use history tracking to avoid repeating failed attempts. Train/test splits prevent overfitting to the evaluation set - the final description is selected based on held-out test performance."
+		},
+		{
+			"order": 7,
+			"title": "Benchmark Aggregation",
+			"description": "The aggregate_benchmark.py script aggregates evaluation results from multiple runs, calculating statistics like mean pass rates and standard deviation. It generates both JSON data files and human-readable markdown reports for documentation.",
+			"nodeIds": [
+				"file:scripts/aggregate_benchmark.py",
+				"file:scripts/generate_report.py"
+			]
+		},
+		{
+			"order": 8,
+			"title": "Interactive Evaluation Viewer",
+			"description": "The eval-viewer provides a web-based interface for reviewing skill evaluation results. generate_review.py starts a local HTTP server that serves the viewer.html page, loads run data, and collects feedback for iteration tracking. The HTML viewer includes filtering and sorting capabilities.",
+			"nodeIds": [
+				"file:eval-viewer/generate_review.py",
+				"file:eval-viewer/viewer.html"
+			],
+			"languageLesson": "Python's http.server module creates lightweight local servers for development tools. Base64-encoding files as data URLs allows embedding assets directly in HTML output, creating self-contained single-file distributions."
+		},
+		{
+			"order": 9,
+			"title": "Agent Definitions",
+			"description": "The agents directory defines three subagents for the evaluation pipeline: grader.md evaluates outputs against expectations, comparator.md performs blind comparison of two outputs, and analyzer.md examines comparison results to generate improvement suggestions. These agents work together to assess skill quality.",
+			"nodeIds": [
+				"document:agents/grader.md",
+				"document:agents/comparator.md",
+				"document:agents/analyzer.md"
+			]
+		},
+		{
+			"order": 10,
+			"title": "Skill Definitions",
+			"description": "The skills directory contains the actual Claude Code skills. The template skill demonstrates the standard SKILL.md structure with YAML frontmatter, while frontend-design provides practical UI/UX guidelines. Each skill is self-contained and can be packaged into a distributable .skill file.",
+			"nodeIds": [
+				"document:skills/template/SKILL.md",
+				"document:skills/frontend-design/SKILL.md"
+			]
+		},
+		{
+			"order": 11,
+			"title": "JSON Schema Reference",
+			"description": "The schemas.md document defines the JSON formats for evaluation data: evals.json for test cases, grading.json for pass/fail results, timing.json for performance metrics, benchmark.json for aggregated statistics, and comparison.json for blind comparison outputs. These schemas ensure consistent data exchange between scripts.",
+			"nodeIds": [
+				"document:references/schemas.md"
+			]
+		},
+		{
+			"order": 12,
+			"title": "Build Configuration",
+			"description": "The configuration files set up the build and development environment. package.json defines npm scripts and dependencies, pnpm-workspace.yaml configures the monorepo structure, tsconfig.json configures TypeScript compilation, and vitest.config.ts sets up unit testing with coverage reporting.",
+			"nodeIds": [
+				"config:package.json",
+				"config:pnpm-workspace.yaml",
+				"config:tsconfig.json",
+				"config:vitest.config.ts"
+			],
+			"languageLesson": "pnpm workspaces enable monorepo management with efficient dependency hoisting. The dev catalog pattern centralizes shared dependency versions, ensuring consistency across all skills in the repository."
+		},
+		{
+			"order": 13,
+			"title": "Development Guide",
+			"description": "The DEVELOPMENT.md provides comprehensive documentation in Chinese, covering project architecture, environment setup, code standards, development workflows, testing guidelines, debugging tips, and contribution guidelines. This complements the English README for contributors who prefer Chinese documentation.",
+			"nodeIds": [
+				"document:DEVELOPMENT.md",
+				"document:README_CN.md"
+			]
+		}
+	]
+}

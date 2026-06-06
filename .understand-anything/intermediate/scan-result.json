@@ -1,0 +1,247 @@
+{
+	"name": "@saqqdy/skills",
+	"description": "A collection of Claude Code skills for building AI-powered development tools. Includes skill development tooling scripts for packaging, validation, and evaluation.",
+	"languages": [
+		"html",
+		"javascript",
+		"json",
+		"markdown",
+		"python",
+		"txt",
+		"typescript",
+		"yaml"
+	],
+	"frameworks": [
+		"Vitest",
+		"ESLint"
+	],
+	"files": [
+		{
+			"path": "agents/analyzer.md",
+			"language": "markdown",
+			"sizeLines": 81,
+			"fileCategory": "docs"
+		},
+		{
+			"path": "agents/comparator.md",
+			"language": "markdown",
+			"sizeLines": 83,
+			"fileCategory": "docs"
+		},
+		{
+			"path": "agents/grader.md",
+			"language": "markdown",
+			"sizeLines": 74,
+			"fileCategory": "docs"
+		},
+		{
+			"path": "assets/eval_review.html",
+			"language": "html",
+			"sizeLines": 144,
+			"fileCategory": "markup"
+		},
+		{
+			"path": "CHANGELOG.md",
+			"language": "markdown",
+			"sizeLines": 88,
+			"fileCategory": "docs"
+		},
+		{
+			"path": "DEVELOPMENT.md",
+			"language": "markdown",
+			"sizeLines": 1366,
+			"fileCategory": "docs"
+		},
+		{
+			"path": "eslint.config.mjs",
+			"language": "javascript",
+			"sizeLines": 16,
+			"fileCategory": "code"
+		},
+		{
+			"path": "eval-viewer/generate_review.py",
+			"language": "python",
+			"sizeLines": 471,
+			"fileCategory": "code"
+		},
+		{
+			"path": "eval-viewer/viewer.html",
+			"language": "html",
+			"sizeLines": 1325,
+			"fileCategory": "markup"
+		},
+		{
+			"path": "package.json",
+			"language": "json",
+			"sizeLines": 42,
+			"fileCategory": "config"
+		},
+		{
+			"path": "pnpm-workspace.yaml",
+			"language": "yaml",
+			"sizeLines": 11,
+			"fileCategory": "config"
+		},
+		{
+			"path": "README_CN.md",
+			"language": "markdown",
+			"sizeLines": 720,
+			"fileCategory": "docs"
+		},
+		{
+			"path": "README.md",
+			"language": "markdown",
+			"sizeLines": 480,
+			"fileCategory": "docs"
+		},
+		{
+			"path": "references/schemas.md",
+			"language": "markdown",
+			"sizeLines": 171,
+			"fileCategory": "docs"
+		},
+		{
+			"path": "scripts/__init__.py",
+			"language": "python",
+			"sizeLines": 0,
+			"fileCategory": "code"
+		},
+		{
+			"path": "scripts/aggregate_benchmark.py",
+			"language": "python",
+			"sizeLines": 279,
+			"fileCategory": "code"
+		},
+		{
+			"path": "scripts/generate_report.py",
+			"language": "python",
+			"sizeLines": 65,
+			"fileCategory": "code"
+		},
+		{
+			"path": "scripts/improve_description.py",
+			"language": "python",
+			"sizeLines": 159,
+			"fileCategory": "code"
+		},
+		{
+			"path": "scripts/package_all.py",
+			"language": "python",
+			"sizeLines": 56,
+			"fileCategory": "code"
+		},
+		{
+			"path": "scripts/package_skill.py",
+			"language": "python",
+			"sizeLines": 139,
+			"fileCategory": "code"
+		},
+		{
+			"path": "scripts/quick_validate.py",
+			"language": "python",
+			"sizeLines": 150,
+			"fileCategory": "code"
+		},
+		{
+			"path": "scripts/run_eval.py",
+			"language": "python",
+			"sizeLines": 309,
+			"fileCategory": "code"
+		},
+		{
+			"path": "scripts/run_loop.py",
+			"language": "python",
+			"sizeLines": 203,
+			"fileCategory": "code"
+		},
+		{
+			"path": "scripts/utils.py",
+			"language": "python",
+			"sizeLines": 69,
+			"fileCategory": "code"
+		},
+		{
+			"path": "skills/frontend-design/LICENSE.txt",
+			"language": "txt",
+			"sizeLines": 177,
+			"fileCategory": "docs"
+		},
+		{
+			"path": "skills/frontend-design/SKILL.md",
+			"language": "markdown",
+			"sizeLines": 42,
+			"fileCategory": "docs"
+		},
+		{
+			"path": "skills/template/references/example.md",
+			"language": "markdown",
+			"sizeLines": 146,
+			"fileCategory": "docs"
+		},
+		{
+			"path": "skills/template/SKILL.md",
+			"language": "markdown",
+			"sizeLines": 72,
+			"fileCategory": "docs"
+		},
+		{
+			"path": "tsconfig.json",
+			"language": "json",
+			"sizeLines": 18,
+			"fileCategory": "config"
+		},
+		{
+			"path": "vitest.config.ts",
+			"language": "typescript",
+			"sizeLines": 8,
+			"fileCategory": "code"
+		}
+	],
+	"totalFiles": 30,
+	"filteredByIgnore": 0,
+	"estimatedComplexity": "small",
+	"importMap": {
+		"agents/analyzer.md": [],
+		"agents/comparator.md": [],
+		"agents/grader.md": [],
+		"assets/eval_review.html": [],
+		"CHANGELOG.md": [],
+		"DEVELOPMENT.md": [],
+		"eslint.config.mjs": [],
+		"eval-viewer/generate_review.py": [],
+		"eval-viewer/viewer.html": [],
+		"package.json": [],
+		"pnpm-workspace.yaml": [],
+		"README_CN.md": [],
+		"README.md": [],
+		"references/schemas.md": [],
+		"scripts/__init__.py": [],
+		"scripts/aggregate_benchmark.py": [],
+		"scripts/generate_report.py": [],
+		"scripts/improve_description.py": [
+			"scripts/utils.py"
+		],
+		"scripts/package_all.py": [
+			"scripts/package_skill.py"
+		],
+		"scripts/package_skill.py": [
+			"scripts/quick_validate.py"
+		],
+		"scripts/quick_validate.py": [],
+		"scripts/run_eval.py": [
+			"scripts/utils.py"
+		],
+		"scripts/run_loop.py": [
+			"scripts/improve_description.py",
+			"scripts/run_eval.py",
+			"scripts/utils.py"
+		],
+		"scripts/utils.py": [],
+		"skills/frontend-design/LICENSE.txt": [],
+		"skills/frontend-design/SKILL.md": [],
+		"skills/template/references/example.md": [],
+		"skills/template/SKILL.md": [],
+		"tsconfig.json": [],
+		"vitest.config.ts": []
+	}
+}
