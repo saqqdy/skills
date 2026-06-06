@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eval Review: __SKILL_NAME_PLACEHOLDER__</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .skill-info {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .skill-info h2 {
+            margin: 0 0 10px 0;
+        }
+        .description {
+            font-size: 14px;
+            color: #333;
+        }
+        .eval-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .eval-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            background: #fafafa;
+            border-radius: 4px;
+        }
+        .eval-item input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .eval-item.query {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .query-text {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .toggle-group {
+            display: flex;
+            gap: 10px;
+        }
+        .toggle-btn {
+            padding: 5px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .toggle-btn.should-trigger {
+            background: #4caf50;
+            color: white;
+        }
+        .toggle-btn.should-not-trigger {
+            background: #f44336;
+            color: white;
+        }
+        .toggle-btn.active {
+            box-shadow: 0 0 0 2px #333;
+        }
+        .actions {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .export-btn {
+            background: #2196f3;
+            color: white;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .export-btn:hover {
+            background: #1976d2;
+        }
+    </style>
+</head>
+<body>
+    <div class="skill-info">
+        <h2>__SKILL_NAME_PLACEHOLDER__</h2>
+        <div class="description">__SKILL_DESCRIPTION_PLACEHOLDER__</div>
+    </div>
+
+    <h1>Eval Set Review</h1>
+    <p>Edit queries and toggle trigger expectations. Click "Export Eval Set" when done.</p>
+
+    <div id="eval-container">
+        __EVAL_DATA_PLACEHOLDER__
+    </div>
+
+    <div class="actions">
+        <button class="export-btn" onclick="exportEvalSet()">Export Eval Set</button>
+    </div>
+
+    <script>
+        const evalData = __EVAL_DATA_PLACEHOLDER__;
+
+        function toggleTrigger(index, shouldTrigger) {
+            evalData[index].should_trigger = shouldTrigger;
+            updateButtons(index);
+        }
+
+        function updateButtons(index) {
+            const item = document.querySelector(`.eval-item[data-index="${index}"]`);
+            const shouldBtn = item.querySelector('.should-trigger');
+            const notBtn = item.querySelector('.should-not-trigger');
+
+            if (evalData[index].should_trigger) {
+                shouldBtn.classList.add('active');
+                notBtn.classList.remove('active');
+            } else {
+                shouldBtn.classList.remove('active');
+                notBtn.classList.add('active');
+            }
+        }
+
+        function exportEvalSet() {
+            const dataStr = JSON.stringify(evalData, null, 2);
+            const blob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'eval_set.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
