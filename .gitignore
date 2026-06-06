@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Python virtual environment
+.venv/
+
+# Build outputs
+dist/
+*.skill
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.so
+.eggs/
+*.egg-info/
+*.egg
+
+# Skill-specific
+evals/workspace/
+*-workspace/
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+.cache/

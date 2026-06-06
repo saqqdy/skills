@@ -1,0 +1,42 @@
+{
+	"name": "@saqqdy/skills",
+	"description": "A collection of Claude Code skills",
+	"type": "module",
+	"version": "1.0.0",
+	"scripts": {
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix",
+		"test": "vitest run",
+		"validate": "python scripts/quick_validate.py skills/",
+		"package": "python scripts/package_all.py",
+		"package:skill": "python scripts/package_skill.py",
+		"prepare": "npx simple-git-hooks"
+	},
+	"devDependencies": {
+		"@eslint-sets/eslint-config": "^6.3.1",
+		"eslint": "^9.0.0",
+		"lint-staged": "^15.0.0",
+		"simple-git-hooks": "^2.11.0",
+		"typescript": "^5.0.0",
+		"vitest": "^3.0.0"
+	},
+	"keywords": [
+		"claude",
+		"claude-code",
+		"skills",
+		"ai",
+		"agents"
+	],
+	"license": "MIT",
+	"author": "saqqdy",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/saqqdy/skills"
+	},
+	"simple-git-hooks": {
+		"pre-commit": "pnpm i --frozen-lockfile --ignore-scripts --offline && npx lint-staged"
+	},
+	"lint-staged": {
+		"*": "eslint --fix"
+	}
+}

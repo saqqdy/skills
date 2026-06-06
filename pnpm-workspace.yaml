@@ -1,0 +1,11 @@
+packages:
+  - "skills/*"
+
+catalogs:
+  dev:
+    "@eslint-sets/eslint-config": ^6.3.1
+    eslint: ^9.0.0
+    lint-staged: ^15.0.0
+    simple-git-hooks: ^2.11.0
+    typescript: ^5.0.0
+    vitest: ^3.0.0
