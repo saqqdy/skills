@@ -1,0 +1,60 @@
+{
+  "skill_name": "kafka-log-analyzer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "分析这段 Kafka Producer 日志：\n\n[2026-01-15 10:23:45] INFO  [kafka-producer-network-thread | producer-1] Successfully sent record to topic orders partition 5 offset 12345\n[2026-01-15 10:23:46] ERROR [kafka-producer-network-thread | producer-1] Failed to send record to topic payments: TimeoutException\n[2026-01-15 10:23:47] WARN  [kafka-producer-network-thread | producer-1] BufferExhaustedException: Buffer is full",
+      "expected_output": "应该识别出 3 个事件：send_success、send_failure、buffer_exhausted",
+      "expectations": [
+        "识别出 send_success 事件",
+        "识别出 send_failure 事件和 TimeoutException 错误",
+        "识别出 buffer_exhausted 事件",
+        "提供 TimeoutException 的修复建议"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "分析这段 Kafka Consumer 日志，重点关注消费积压问题：\n\n[2026-01-15 10:23:48] INFO  [kafka-consumer-thread] Consumer group order-processor: assigned partitions [orders-0, orders-1]\n[2026-01-15 10:23:49] WARN  [kafka-consumer-thread] Consumer group order-processor: lag exceeded threshold (50000 messages)\n[2026-01-15 10:23:50] ERROR [kafka-consumer-thread] CommitFailedException: Commit cannot be completed due to group rebalance",
+      "expected_output": "应该检测到消费积压和提交失败",
+      "expectations": [
+        "识别出 consumer_lag 事件，积压 50000 条",
+        "识别出 commit_failure 事件",
+        "提供增加 Consumer 实例的建议",
+        "提供调整 max.poll.interval.ms 的建议"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "分析这段 JSON 格式的 Kafka 日志：\n\n{\"timestamp\": \"2026-01-15T10:23:45Z\", \"level\": \"ERROR\", \"thread\": \"kafka-producer-1\", \"message\": \"Failed to send record to topic orders\", \"error\": \"NetworkException\", \"topic\": \"orders\", \"traceId\": \"abc-123\"}",
+      "expected_output": "应该正确解析 JSON 格式并提取字段",
+      "expectations": [
+        "正确解析 JSON 格式",
+        "提取 timestamp、level、thread 字段",
+        "识别 send_failure 事件和 NetworkException 错误",
+        "提取 traceId 字段"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "这段日志显示频繁 Rebalance，请分析原因并提供建议：\n\n[2026-01-15 10:23:51] INFO  [kafka-consumer-thread] Revoking previously assigned partitions [orders-0]\n[2026-01-15 10:23:52] INFO  [kafka-consumer-thread] (Re-)joining group order-processor\n[2026-01-15 10:23:53] INFO  [kafka-consumer-thread] Successfully joined group order-processor with generation 5\n[2026-01-15 10:23:54] INFO  [kafka-consumer-thread] Revoking previously assigned partitions [orders-0]\n[2026-01-15 10:23:55] INFO  [kafka-consumer-thread] (Re-)joining group order-processor",
+      "expected_output": "应该检测到频繁 Rebalance 问题",
+      "expectations": [
+        "识别出多次 rebalance 事件",
+        "指出 Rebalance 频繁的问题",
+        "提供 session.timeout.ms 和 max.poll.interval.ms 配置建议",
+        "建议使用静态成员 group.instance.id"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "分析这段 Broker 日志：\n\n[2026-01-15 10:23:56] INFO  [ReplicaManager] Partition orders-5: leader changed from 1 to 2\n[2026-01-15 10:23:57] WARN  [ReplicaFetcherThread] Replica not available for partition orders-5\n[2026-01-15 10:23:58] ERROR [KafkaApi] NotLeaderForPartitionException: Leader not local for partition orders-5",
+      "expected_output": "应该识别 Broker 层面的问题",
+      "expectations": [
+        "识别出 leader_change 事件",
+        "识别出 replica_unavailable 事件",
+        "识别出 not_leader 事件",
+        "说明这是正常的 Leader 切换，可以重试"
+      ]
+    }
+  ]
+}
