@@ -3,22 +3,24 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "分析这段 Kafka Producer 日志：\n\n[2026-01-15 10:23:45] INFO  [kafka-producer-network-thread | producer-1] Successfully sent record to topic orders partition 5 offset 12345\n[2026-01-15 10:23:46] ERROR [kafka-producer-network-thread | producer-1] Failed to send record to topic payments: TimeoutException\n[2026-01-15 10:23:47] WARN  [kafka-producer-network-thread | producer-1] BufferExhaustedException: Buffer is full",
-      "expected_output": "应该识别出 3 个事件：send_success、send_failure、buffer_exhausted",
+      "prompt": "分析这段 Kafka Producer 日志：\n\n[2026-01-15 10:23:45] INFO  [kafka-producer-network-thread | producer-1] Successfully sent record to topic orders partition 5 offset 12345\n[2026-01-15 10:23:46] ERROR [kafka-producer-network-thread | producer-1] Failed to send record to topic payments: TimeoutException\n[2026-01-15 10:23:47] WARN  [kafka-producer-network-thread | producer-1] BufferExhaustedException: Buffer is full, blocking for 1000ms",
+      "expected_output": "应识别出 3 个事件：send_success/P1、send_failure/P1、buffer_exhausted/P2",
       "expectations": [
         "识别出 send_success 事件",
         "识别出 send_failure 事件和 TimeoutException 错误",
         "识别出 buffer_exhausted 事件",
-        "提供 TimeoutException 的修复建议"
+        "对 send_failure 建议 P1 优先级修复",
+        "提供 TimeoutException 的配置调整建议"
       ]
     },
     {
       "id": 2,
       "prompt": "分析这段 Kafka Consumer 日志，重点关注消费积压问题：\n\n[2026-01-15 10:23:48] INFO  [kafka-consumer-thread] Consumer group order-processor: assigned partitions [orders-0, orders-1]\n[2026-01-15 10:23:49] WARN  [kafka-consumer-thread] Consumer group order-processor: lag exceeded threshold (50000 messages)\n[2026-01-15 10:23:50] ERROR [kafka-consumer-thread] CommitFailedException: Commit cannot be completed due to group rebalance",
-      "expected_output": "应该检测到消费积压和提交失败",
+      "expected_output": "应检测到消费积压和提交失败",
       "expectations": [
         "识别出 consumer_lag 事件，积压 50000 条",
         "识别出 commit_failure 事件",
+        "消费积压判定为 P1 优先级",
         "提供增加 Consumer 实例的建议",
         "提供调整 max.poll.interval.ms 的建议"
       ]
@@ -26,21 +28,23 @@
     {
       "id": 3,
       "prompt": "分析这段 JSON 格式的 Kafka 日志：\n\n{\"timestamp\": \"2026-01-15T10:23:45Z\", \"level\": \"ERROR\", \"thread\": \"kafka-producer-1\", \"message\": \"Failed to send record to topic orders\", \"error\": \"NetworkException\", \"topic\": \"orders\", \"traceId\": \"abc-123\"}",
-      "expected_output": "应该正确解析 JSON 格式并提取字段",
+      "expected_output": "应正确解析 JSON 格式并提取字段",
       "expectations": [
         "正确解析 JSON 格式",
         "提取 timestamp、level、thread 字段",
         "识别 send_failure 事件和 NetworkException 错误",
-        "提取 traceId 字段"
+        "提取 topic 和 traceId 字段",
+        "自动检测为 JSON 格式"
       ]
     },
     {
       "id": 4,
       "prompt": "这段日志显示频繁 Rebalance，请分析原因并提供建议：\n\n[2026-01-15 10:23:51] INFO  [kafka-consumer-thread] Revoking previously assigned partitions [orders-0]\n[2026-01-15 10:23:52] INFO  [kafka-consumer-thread] (Re-)joining group order-processor\n[2026-01-15 10:23:53] INFO  [kafka-consumer-thread] Successfully joined group order-processor with generation 5\n[2026-01-15 10:23:54] INFO  [kafka-consumer-thread] Revoking previously assigned partitions [orders-0]\n[2026-01-15 10:23:55] INFO  [kafka-consumer-thread] (Re-)joining group order-processor",
-      "expected_output": "应该检测到频繁 Rebalance 问题",
+      "expected_output": "应检测到频繁 Rebalance 问题（rebalance_storm）",
       "expectations": [
         "识别出多次 rebalance 事件",
-        "指出 Rebalance 频繁的问题",
+        "检测到 rebalance_storm 异常",
+        "指出 Rebalance 频繁的问题严重性为 high 或 critical",
         "提供 session.timeout.ms 和 max.poll.interval.ms 配置建议",
         "建议使用静态成员 group.instance.id"
       ]
@@ -48,12 +52,61 @@
     {
       "id": 5,
       "prompt": "分析这段 Broker 日志：\n\n[2026-01-15 10:23:56] INFO  [ReplicaManager] Partition orders-5: leader changed from 1 to 2\n[2026-01-15 10:23:57] WARN  [ReplicaFetcherThread] Replica not available for partition orders-5\n[2026-01-15 10:23:58] ERROR [KafkaApi] NotLeaderForPartitionException: Leader not local for partition orders-5",
-      "expected_output": "应该识别 Broker 层面的问题",
+      "expected_output": "应识别 Broker 层面的问题",
       "expectations": [
         "识别出 leader_change 事件",
-        "识别出 replica_unavailable 事件",
-        "识别出 not_leader 事件",
+        "识别出副本不可用相关日志",
+        "识别出 NotLeaderForPartitionException",
+        "Leader 切换判定为 P2（偶发可自动恢复）",
         "说明这是正常的 Leader 切换，可以重试"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "分析以下混合日志，按优先级排序所有问题：\n\n[2026-01-15 10:23:45] INFO  [producer-1] Successfully sent record to topic events partition 0 offset 100\n[2026-01-15 10:23:46] ERROR [producer-1] Failed to send record to topic orders: TimeoutException\n[2026-01-15 10:23:46] ERROR [producer-1] Failed to send record to topic orders: TimeoutException\n[2026-01-15 10:23:47] WARN  [consumer-1] Consumer group order-processor: lag exceeded threshold (20000 messages)\n[2026-01-15 10:23:48] ERROR [producer-1] ProducerFencedException: producer with transactional.id order-tx-1 fenced\n[2026-01-15 10:23:49] INFO  [consumer-1] Assigned partitions [orders-0, orders-1]",
+      "expected_output": "应按 P0→P1→P2→P3 正确排序各项问题",
+      "expectations": [
+        "ProducerFencedException 判定为 P0",
+        "消费积压 20000 条被判为 P1",
+        "TimeoutException 判为 P1（2次 ERROR）",
+        "按优先级从高到低排序输出",
+        "给出整体修复优先级建议"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "以下日志在 10:23~10:25 时间段内集中出现错误，请做时间线分析：\n\n[2026-01-15 10:23:45] INFO  [producer-1] Successfully sent record to topic events\n[2026-01-15 10:23:46] WARN  [consumer-1] lag exceeded threshold (1000 messages)\n[2026-01-15 10:24:10] ERROR [producer-1] Failed to send record to topic orders: TimeoutException\n[2026-01-15 10:24:11] ERROR [producer-1] Failed to send record to topic orders: TimeoutException\n[2026-01-15 10:24:12] ERROR [producer-1] Failed to send record to topic orders: TimeoutException\n[2026-01-15 10:24:30] WARN  [consumer-1] lag exceeded threshold (5000 messages)\n[2026-01-15 10:25:00] WARN  [consumer-1] lag exceeded threshold (15000 messages)",
+      "expected_output": "应识别出错误集中在 10:23~10:25 时间段，且消费积压在加速增长",
+      "expectations": [
+        "识别错误集中在 10:23~10:25 时间段",
+        "指出消费积压从 1000 增长到 15000，呈现加速趋势",
+        "检测到 error_rate_spike 或 error_rate_trend_up",
+        "建议检查该时段是否有部署变更或流量突增",
+        "提供时间线形式的输出"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "这段日志显示 orders topic 的 Producer 超时，请搜索项目中的 Kafka 配置和 OrderProducer 类，给出代码层面的修复方案：\n\n[2026-01-15 10:24:10] ERROR [order-producer] Failed to send record to topic orders: TimeoutException\n[2026-01-15 10:24:11] ERROR [order-producer] Failed to send record to topic orders: TimeoutException\n[2026-01-15 10:24:12] ERROR [order-producer] Failed to send record to topic orders: TimeoutException",
+      "expected_output": "应触发源码联动阶段，搜索项目中 Kafka 配置和 Producer 代码",
+      "expectations": [
+        "建议搜索 application.yml 中的 Kafka 配置",
+        "建议搜索 OrderProducer 类的代码",
+        "给出 request.timeout.ms 调优建议",
+        "建议添加异步回调错误处理",
+        "提供可执行的代码修复 diff"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "分析这段包含序列化错误的日志：\n\n[2026-01-15 10:23:45] INFO  [producer-1] Successfully sent record to topic events\n[2026-01-15 10:23:46] ERROR [producer-1] SerializationException: Error serializing key/value for topic orders\n[2026-01-15 10:23:47] ERROR [producer-1] SerializationException: Error serializing key/value for topic orders\n[2026-01-15 10:23:48] ERROR [producer-1] SerializationException: Error serializing key/value for topic orders",
+      "expected_output": "应检测到 serialization_errors 异常聚类",
+      "expectations": [
+        "识别出 serialization_error 事件",
+        "检测到 serialization_errors 异常（>=3次）",
+        "建议检查 Schema Registry 兼容性",
+        "确认 Producer/Consumer Serializer 配置一致",
+        "判定优先级为 P1 或 P2"
       ]
     }
   ]
