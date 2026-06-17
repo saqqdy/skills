@@ -1,0 +1,83 @@
+{
+  "skill_name": "frontend-error-analyze",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "分析这段前端错误堆栈：\n\nTypeError: Cannot read properties of undefined (reading 'map')\n  at UserList (src/components/UserList.vue:25:18)\n  at renderComponentRoot (node_modules/vue/dist/vue.runtime.esm.js:1234:5)\n  at renderVNode (node_modules/vue/dist/vue.runtime.esm.js:2345:7)",
+      "expected_output": "应识别为 js_runtime 类型错误，定位到 UserList.vue:25 行的可选链问题",
+      "expectations": [
+        "识别为 TypeError / js_runtime 类别",
+        "指出 UserList.vue:25 行的 map 调用对象为 undefined",
+        "建议使用可选链 ?. 或条件渲染守卫",
+        "提供具体修复代码片段"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "分析这个 GlitchTip Event 的面包屑：\n\n面包屑：\n1. navigation → /dashboard\n2. xhr POST /api/reports/export (status: 502)\n3. ui.click → button.export\n4. exception → TypeError: Cannot read 'url' of undefined at ReportExport.vue:42\n\n错误堆栈：TypeError: Cannot read properties of undefined (reading 'url')",
+      "expected_output": "应还原触发路径：导出按钮 → 接口 502 → 解析响应时未处理空值",
+      "expectations": [
+        "还原用户操作路径：页面→点击导出→接口502→错误",
+        "指出根因是接口返回 502 时 response.data 为 null",
+        "建议对 5xx 响应做统一错误处理",
+        "建议添加可选链 response.data?.url"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "这个错误的 OpenReplay session ID 是 sess_abc123，事件流显示：\n- 10:23:01 页面加载 /dashboard\n- 10:23:03 点击导出按钮\n- 10:23:04 POST /api/reports/export 返回 502 (耗时 30s)\n- 10:23:05 TypeError: Cannot read 'url' of undefined\n\n请还原用户操作路径并分析根因",
+      "expected_output": "应结合会话回放精确还原操作路径，定位 502 响应导致的数据缺失",
+      "expectations": [
+        "精确还原时间线操作路径",
+        "指出 502 超时 30s 是触发条件",
+        "区分操作原因（按钮点击）和直接原因（响应空值）",
+        "建议同时修复前后端：后端增加超时处理，前端增加空值守卫"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "线上出现 ChunkLoadError: Loading chunk 5 failed 错误，24小时内影响了 58 位用户，请分析原因并给出解决方案",
+      "expected_output": "应识别为 resource 类别，分析部署版本不一致的根因",
+      "expectations": [
+        "识别为 resource / ChunkLoadError 类别",
+        "解释根因：部署新版本后旧 chunk 被删除",
+        "建议路由级错误边界 + 自动刷新加载最新资源",
+        "建议部署时保留旧版本 chunk 或设置 HTML 不缓存策略"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "分析这段 CORS 错误：\n\nAccess to XMLHttpRequest at 'https://api.example.com/v2/users' from origin 'https://app.example.com' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+      "expected_output": "应识别为 network CORS 错误，给出服务端配置方案",
+      "expectations": [
+        "识别为 network / CORS 类别",
+        "指出是 OPTIONS 预检请求响应缺少 CORS 头",
+        "提供 Nginx 或后端 CORS 配置示例",
+        "提示 withCredentials 与通配符 * 的冲突注意事项"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "分析频繁的 Vue Rebalance 错误：\n\n[Vue warn]: Maximum recursive updates exceeded in component <OrderList>\n\n错误堆栈指向 watch 和 computed 互相触发的循环依赖",
+      "expected_output": "应识别为 framework 类别的无限更新循环",
+      "expectations": [
+        "识别为 framework / Maximum update depth 类别",
+        "指出 watch 和 computed 存在循环依赖",
+        "建议检查 watch 的 immediate 和 deep 选项",
+        "建议添加条件守卫打破循环"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "24小时内未解决的错误汇总：\n1. TypeError: Cannot read 'map' of undefined - 342次, 89用户\n2. ChunkLoadError - 58次, 58用户（全是新用户）\n3. UnhandledRejection: NetworkError - 1200次, 23用户\n4. CORS error on /api/export - 15次, 12用户\n\n请分级并给出优先处理建议",
+      "expected_output": "应按 P0-P3 正确分级并给出全局建议",
+      "expectations": [
+        "TypeError (89用户) 分为 P0 或 P1",
+        "UnhandledRejection (1200次) 分为 P1",
+        "ChunkLoadError (新增错误) 分为 P1 或 P2",
+        "CORS (12用户) 分为 P2 或 P3",
+        "给出整体修复优先级和系统建议"
+      ]
+    }
+  ]
+}
